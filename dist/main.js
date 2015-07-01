@@ -20,13 +20,6 @@ var $leaderlist = $('#leaderlist');
 $leaderlist.hide();
 
 var $btnsoundeffects = $('#btnsoundeffects');
-
-
-// <div id="musicvolume">Game Volume<br>
-// <button id="btnmusic">low</button>
-// <div id="soundeffects">Sound Effects<br>
-// <button id="btnsoundeffects">ON</button>
-
 var $divsettingsection = $('#divsettingsection');
 $divsettingsection.hide();
 
@@ -40,11 +33,14 @@ $btnmusic.on('click', btnmusic);
 
 var $loading = $('#loading');
 $loading.show();
-setTimeout(loading, 4000)
+setTimeout(function(){
+	var myApp = new App();
+	Backbone.history.start();
+}, 4000)
 
-$play.on('click', play);
-$leaderboards.on('click', leaderboards);
-$settings.on('click', settings);
+// $play.on('click', play);
+// $leaderboards.on('click', leaderboards);
+// $settings.on('click', settings);
 $backbutton.on('click', background);
 $btnsoundeffects.on('click', btnsoundeffects);
 
@@ -56,13 +52,7 @@ function loading(){
 }
 
 function play() {
-	$gamebackground.show();
-	$backbutton.show();
-	$play.hide();
-	$leaderboards.hide();
-	$settings.hide();
-	$leaderboards.hide();
-	$divsettingsection.hide();
+	myApp.navigate('play',{trigger: true});
 }
 function background(){
 	loading();
@@ -73,18 +63,12 @@ function background(){
 
 }
 function leaderboards(){
-	$leaderlist.show();
-	$gamebackground.hide();
-	$backbutton.show();
-	$play.hide();
-	$leaderboards.hide();
-	$settings.hide();
-	$divsettingsection.hide();
+	myApp.navigate('leaderboards',{trigger: true});
 
 }
 function settings(){
-	$divsettingsection.show();
-	loading();
+	myApp.navigate('settings',{trigger: true});
+
 }
 
 function btnmusic(){
@@ -108,4 +92,43 @@ function btnsoundeffects(){
 		$(this).text('ON');
 	}
 }
+var App = Backbone.Router.extend({
+	routes: {
+		'': 'home',
+		'play': 'play',
+		'leaderboards': 'leaderboards',
+		'settings': 'settings'
+	},
+	home: function(){
+		loading();
+		$gamebackground.hide();
+		$backbutton.hide();
+		$leaderlist.hide();
+		$divsettingsection.hide();
+	},
+	play: function(){
+		$gamebackground.show();
+		$backbutton.show();
+		$play.hide();
+		$leaderboards.hide();
+		$settings.hide();
+		$leaderboards.hide();
+		$divsettingsection.hide();
+	},
+	leaderboards: function(){
+		$leaderlist.show();
+		$gamebackground.hide();
+		$backbutton.show();
+		$play.hide();
+		$leaderboards.hide();
+		$settings.hide();
+		$divsettingsection.hide();
+	},
+	settings: function(){
+		$divsettingsection.show();
+		loading();
+
+	}
+});
+
 
